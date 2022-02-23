@@ -244,8 +244,13 @@ function DisplayCredentialMessage(props) {
 }
 
 class WelcomeComponent extends Component {
+  constructor(props){
+    super(props);
+    this.retrieveWelcomMessage = this.retrieveWelcomMessage.bind(this);
+  }
   render() {
     return (
+      <>
       <div className="container">
         <h1>
           {" "}
@@ -253,7 +258,14 @@ class WelcomeComponent extends Component {
         </h1>
         To check your todo List <Link to="/todo">go here</Link>
       </div>
+      <div>
+      <button onClick={this.retrieveWelcomMessage} className="btn btn-success">Api call</button>
+      </div>
+      </>
     );
+  }
+  retrieveWelcomMessage(){
+    console.log("api call");
   }
 }
 
