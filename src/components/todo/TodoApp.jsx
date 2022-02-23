@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
 import { useNavigate, useParams } from "react-router";
 import "./TodoApp.css";
 import AuthenticationService from "./AuthenticationService";
+import HelloWorldService from "../../api/todo/HelloWorldService";
 
 export class TodoApp extends Component {
   render() {
@@ -246,7 +247,13 @@ function DisplayCredentialMessage(props) {
 class WelcomeComponent extends Component {
   constructor(props){
     super(props);
+    this.state ={
+      welcomeMsg: '',
+      hardcodedName: 'jayen'
+    }
     this.retrieveWelcomMessage = this.retrieveWelcomMessage.bind(this);
+    this.handleSuccessfulResponse = this.handleSuccessfulResponse.bind(this);
+    this.handleError = this.handleError.bind(this);
   }
   render() {
     return (
@@ -261,11 +268,30 @@ class WelcomeComponent extends Component {
       <div>
       <button onClick={this.retrieveWelcomMessage} className="btn btn-success">Api call</button>
       </div>
+      <div className="container">
+      {this.state.welcomeMsg}
+      </div>
       </>
     );
   }
   retrieveWelcomMessage(){
     console.log("api call");
+    // HelloWorldService.executHelloWorldService()
+    // .then(response => this.handleSuccessfulResponse(response))
+    //console.log(this.state.hardcodedName);
+    HelloWorldService.executHelloWorldPathVariableService(this.state.hardcodedName)
+    .then(response => this.handleSuccessfulResponse(response))
+    .catch(error => this.handleError(error))
+
+
+  }
+  handleSuccessfulResponse(response){
+    console.log("response");
+    this.setState({welcomeMsg: response.data.message})
+  }
+  handleError(error){
+    console.log("error");
+    this.setState({welcomeMsg: error.response.data.message})
   }
 }
 
