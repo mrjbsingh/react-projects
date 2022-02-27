@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import "./TodoApp.css";
 import AuthenticationService from "./AuthenticationService";
 import HelloWorldService from "../../api/todo/HelloWorldService";
+import TodoDataService from "../../api/todo/TodoDataService";
 
 export class TodoApp extends Component {
   render() {
@@ -152,7 +153,7 @@ class LoginComponent extends Component {
     console.log("i m in");
     console.log(this.state);
     
-    if (this.state.username === "j" && this.state.password === "j") {
+    if (this.state.username === "jay" && this.state.password === "jay") {
       console.log("correct");
       AuthenticationService.registerUser(this.state.username, this.state.password);
       this.setState({
@@ -287,7 +288,7 @@ class WelcomeComponent extends Component {
   }
   handleSuccessfulResponse(response){
     console.log("response");
-    this.setState({welcomeMsg: response.data.message})
+    this.setState({welcomeMsg: response.data.msg})
   }
   handleError(error){
     console.log("error");
@@ -309,24 +310,24 @@ class ListTodoComponent extends Component {
 
     this.state = {
       todos: [
-        {
-          id: 1,
-          description: "Learn dance",
-          targetDate: "jan 19",
-          isCompleted: false,
-        },
-        {
-          id: 2,
-          description: "Learn cook",
-          targetDate: "jan 24",
-          isCompleted: false,
-        },
-        {
-          id: 3,
-          description: "Learn React",
-          targetDate: "jan 22",
-          isCompleted: false,
-        },
+        // {
+        //   id: 1,
+        //   description: "Learn dance",
+        //   targetDate: "jan 19",
+        //   isCompleted: false,
+        // },
+        // {
+        //   id: 2,
+        //   description: "Learn cook",
+        //   targetDate: "jan 24",
+        //   isCompleted: false,
+        // },
+        // {
+        //   id: 3,
+        //   description: "Learn React",
+        //   targetDate: "jan 22",
+        //   isCompleted: false,
+        // },
       ],
     };
   }
@@ -349,7 +350,7 @@ class ListTodoComponent extends Component {
                 <tr>
                   <th>{todo.id}</th>
                   <th>{todo.description}</th>
-                  <th>{todo.isCompleted.toString()}</th>
+                  <th>{todo.done.toString()}</th>
                   <th>{todo.targetDate}</th>
                 </tr>
               ))}
@@ -358,6 +359,15 @@ class ListTodoComponent extends Component {
         </div>
       </div>
     );
+  }
+  componentDidMount(){
+    let username = AuthenticationService.getLoggedInUser();
+    TodoDataService.executeFindAllTodos(username)
+    .then( response => {
+      console.log("Mount func");
+      console.log(response.data[0].done.toString());
+      this.setState({todos: response.data})
+    })
   }
 }
 export default TodoApp;
