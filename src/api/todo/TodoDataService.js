@@ -8,6 +8,12 @@ class TodoDataService{
         return axios.get('http://localhost:8080/users/'+username+'/todos');
  
     }
+    deleteTodo(username, id){
+        console.log("Service call for deleting Todo "+ username);
+        console.log('http://localhost:8080/users/'+username+'/todos/'+id);
+        //console.log(axios.delete('http://localhost:8080/users/'+username+'/todos/'+id));
+        return axios.delete('http://localhost:8080/users/'+username+'/todos/'+id);
+    }
 
 }
 

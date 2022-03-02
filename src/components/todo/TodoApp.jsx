@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import "./TodoApp.css";
 import AuthenticationService from "./AuthenticationService";
 import HelloWorldService from "../../api/todo/HelloWorldService";
-import TodoDataService from "../../api/todo/TodoDataService";
+import ListTodoComponent from "./ListTodoComponent"
 
 export class TodoApp extends Component {
   render() {
@@ -16,7 +16,8 @@ export class TodoApp extends Component {
           <Route path="/login" element={<LoginComponent />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/welcome/:name" element={<WelcomeComponent />} />
-          <Route path="/todo" element={<ListTodoComponent />} />
+          {/*<Route path="/todo/:id" element={<TodoComponent {... this.props} />}/>*/}
+          <Route path="/todos" element={<ListTodoComponent />} />
           <Route path="*" element={<ErrorComponent />} />
         </Routes>
         <Footer />
@@ -304,70 +305,5 @@ function ErrorComponent() {
   return <div>Error - please contact support</div>;
 }
 
-class ListTodoComponent extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      todos: [
-        // {
-        //   id: 1,
-        //   description: "Learn dance",
-        //   targetDate: "jan 19",
-        //   isCompleted: false,
-        // },
-        // {
-        //   id: 2,
-        //   description: "Learn cook",
-        //   targetDate: "jan 24",
-        //   isCompleted: false,
-        // },
-        // {
-        //   id: 3,
-        //   description: "Learn React",
-        //   targetDate: "jan 22",
-        //   isCompleted: false,
-        // },
-      ],
-    };
-  }
-  render() {
-    return (
-      <div>
-        <h1>List Todo</h1>
-        <div className="container">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Desciption</th>
-                <th>Is completed ?</th>
-                <th>Target Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.todos.map((todo) => (
-                <tr>
-                  <th>{todo.id}</th>
-                  <th>{todo.description}</th>
-                  <th>{todo.done.toString()}</th>
-                  <th>{todo.targetDate}</th>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
-  }
-  componentDidMount(){
-    let username = AuthenticationService.getLoggedInUser();
-    TodoDataService.executeFindAllTodos(username)
-    .then( response => {
-      console.log("Mount func");
-      console.log(response.data[0].done.toString());
-      this.setState({todos: response.data})
-    })
-  }
-}
 export default TodoApp;
