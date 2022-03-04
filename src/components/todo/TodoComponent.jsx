@@ -1,10 +1,18 @@
 import react, {Component} from "react";
 import { useHistory, useParams } from 'react-router-dom'
-function TodoComponent(props) {
+
+class TodoComponent extends Component {
    
-    let params  = useParams();
-    console.log(params.id);
-    return (<div>Todo Component for id - {params.id}</div>)
-    
+    constructor(props){
+        super(props)
+
+        this.state ={
+            id: this.props.params.id
+        }
+    }
+    render(){
+
+        return (<div>Todo Component for id - {this.state.id}</div>);
+    }
 }
 export default TodoComponent;

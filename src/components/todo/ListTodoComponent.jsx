@@ -93,9 +93,9 @@ class ListTodoComponent extends Component {
     updateTodoClicked(id){
       let username = AuthenticationService.getLoggedInUser();
       console.log("Todo updated "+ id+" for "+ username);
-      this.props.history.push('/todos/'+id);
-      
+      //this.props.history.push('/todos/'+id);
+      this.props.navigate(`/todo/${id}`)//REACT-6
     }
   }
 
-export default withRouter(ListTodoComponent);
+export default ListTodoComponent;

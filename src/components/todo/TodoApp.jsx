@@ -5,19 +5,25 @@ import "./TodoApp.css";
 import AuthenticationService from "./AuthenticationService";
 import HelloWorldService from "../../api/todo/HelloWorldService";
 import ListTodoComponent from "./ListTodoComponent"
+import TodoComponent from "./TodoComponent";
+import withNavigation from "./WithNavigation";
+import withParams from "./WithParams";
 
 export class TodoApp extends Component {
   render() {
+    const LoginComponentWithNavigation = withNavigation(LoginComponent);
+    const ListTodosComponentWithNavigation = withNavigation(ListTodoComponent);
+    const TodoComponentWithParamsAndNavigation = withParams(withNavigation(TodoComponent));
     return (
-      <div>
+      <div className="TodoApp">
         <Header />
         <Routes>
-          <Route path="/" element={<LoginComponent />} />
-          <Route path="/login" element={<LoginComponent />} />
+          <Route path="/" element={<LoginComponentWithNavigation />} />
+          <Route path="/login" element={<LoginComponentWithNavigation />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/welcome/:name" element={<WelcomeComponent />} />
-          {/*<Route path="/todo/:id" element={<TodoComponent {... this.props} />}/>*/}
-          <Route path="/todos" element={<ListTodoComponent />} />
+          <Route path="/todo/:id" element={<TodoComponentWithParamsAndNavigation />} />
+          <Route path="/todos" element={<ListTodosComponentWithNavigation />} />
           <Route path="*" element={<ErrorComponent />} />
         </Routes>
         <Footer />
@@ -61,7 +67,7 @@ class Header extends Component {
                 </a>
               </li>}
                 <li className="nav-item">
-                  <a className="nav-link" href="/todo">
+                  <a className="nav-link" href="/todos">
                     Todo
                   </a>
                 </li>
@@ -161,7 +167,7 @@ class LoginComponent extends Component {
         invalidCredential: false,
         loginSuccessfully: true,
       });
-      
+      this.props.navigate(`/welcome/`+this.state.username);
     } else {
       console.log("wrong");
       this.setState({
@@ -265,7 +271,7 @@ class WelcomeComponent extends Component {
           {" "}
           Welcome <GetUsername />
         </h1>
-        To check your todo List <Link to="/todo">go here</Link>
+        To check your todo List <Link to="/todos">go here</Link>
       </div>
       <div>
       <button onClick={this.retrieveWelcomMessage} className="btn btn-success">Api call</button>
