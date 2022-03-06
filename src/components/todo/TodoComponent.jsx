@@ -14,6 +14,7 @@ class TodoComponent extends Component {
       description: "",
       targetDate: moment(new Date()).format("YYYY-MM-DD"),
     };
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   validates(values) {
@@ -32,12 +33,33 @@ class TodoComponent extends Component {
   }
 
   onSubmit(values) {
-    console.log(values);
+    
+    let username = AuthenticationService.getLoggedInUser();
+    
+    let todo = {
+      id: this.state.id,
+      username: username,
+      description: values.description,
+      targetDate: values.targetDate,
+    };
+    if (this.state == -1) {
+      TodoDataService.addNewTodo(username, todo).then((response) => {
+        console.log("added todo");
+        this.props.navigate(`/todos`);
+      });
+    } 
+    else {
+      TodoDataService.executeUpdateTodo(username, this.state.id, todo).then((response) => {
+        console.log("update todo");
+        this.props.navigate(`/todos`);
+      });
+    }
   }
 
   componentDidMount() {
     let username = AuthenticationService.getLoggedInUser();
-    this.loadTodoById(username, this.state.id);
+    if (this.state.id == -1) return;
+    else this.loadTodoById(username, this.state.id);
   }
   loadTodoById(username, id) {
     TodoDataService.executeTodoById(username, id).then((response) => {

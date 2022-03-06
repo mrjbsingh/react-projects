@@ -4,6 +4,7 @@ import { withRouter } from "react-router";
 import TodoDataService from "../../api/todo/TodoDataService";
 import AuthenticationService from "./AuthenticationService";
 import TodoComponent from "./TodoComponent"
+import moment from "moment";
 
 class ListTodoComponent extends Component {
     constructor(props) {
@@ -32,6 +33,9 @@ class ListTodoComponent extends Component {
         ],
         message: null
       };
+      this.deleteTodoClicked = this.deleteTodoClicked.bind(this);
+      this.updateTodoClicked = this.updateTodoClicked.bind(this);
+      this.addTodoClicked = this.addTodoClicked.bind(this);
     }
     render() {
       return (
@@ -56,14 +60,18 @@ class ListTodoComponent extends Component {
                     <td>{todo.id}</td>
                     <td>{todo.description}</td>
                     <td>{todo.done.toString()}</td>
-                    <td>{todo.targetDate}</td>
+                    <td>{moment(todo.targetDate).format("DD-MM-YYYY")}</td>
                     <td><button className="btn btn-success" onClick={()=> this.updateTodoClicked(todo.id)}>Update</button></td>
                     <td><button className="btn btn-warning" onClick={()=> this.deleteTodoClicked(todo.id)}>Delete</button></td>
                   </tr>
                 ))}
               </tbody>
             </table>
+            <div >
+            <button className="btn btn-success" onClick={()=> this.addTodoClicked()}>Add Todo</button>
           </div>
+          </div>
+          
         </div>
       );
     }
@@ -95,6 +103,13 @@ class ListTodoComponent extends Component {
       console.log("Todo updated "+ id+" for "+ username);
       //this.props.history.push('/todos/'+id);
       this.props.navigate(`/todo/${id}`)//REACT-6
+    }
+
+    addTodoClicked(){
+      let username = AuthenticationService.getLoggedInUser();
+      console.log("Todo updated "+ -1+" for "+ username);
+      //this.props.history.push('/todos/'+id);
+      this.props.navigate(`/todo/-1`)//REACT-6
     }
   }
 
